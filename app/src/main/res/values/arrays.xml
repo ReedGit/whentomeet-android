@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerhour">
+        <item>1h</item>
+        <item>2h</item>
+        <item>3h</item>
+    </string-array>
+</resources>
