@@ -106,12 +106,7 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                         }
                     });
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
+                    builder.setNegativeButton("取消", null);
                     builder.create().show();
                     menuItem.setChecked(false);
                     break;

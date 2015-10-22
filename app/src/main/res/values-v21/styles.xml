@@ -9,6 +9,7 @@
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:listDivider">@drawable/divider_recycler</item>
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
 </resources>
