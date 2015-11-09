@@ -6,9 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-/**
- * Created by 伟 on 2015/10/21.
- */
+
 public class DateAdapter extends PagerAdapter {
 
     private List<View> mViewList;

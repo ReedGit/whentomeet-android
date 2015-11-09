@@ -1,44 +1,74 @@
 package com.giot.meeting;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by 伟 on 2015/10/16.
- */
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.giot.meeting.configs.SysConstants;
+import com.giot.meeting.utils.UrlParamCompleter;
+import com.giot.meeting.utils.VolleyUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class DetailActivity extends AppCompatActivity {
 
+    private final static String TAG = DetailActivity.class.toString();
+
     private Toolbar toolbarDetail;
-    private TextView detailTitle, detailContent, detailLocation, detailDate, detailPerson, detailRemark, detailVisible;
+    private TextView detailTitle, detailContent, detailLocation, detailDuration, detailRemark, detailVisible;
+    private String meetId;
+    private Context context;
+    private ProgressDialog progressDialog;
+    private LinearLayout meetDetail;
+    private Button checkTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        context = getApplicationContext();
+        meetId = getIntent().getStringExtra("meetId");
         initView();
+        showData();
+        initListener();
     }
 
-    void initView() {
-        toolbarDetail = (Toolbar) findViewById(R.id.toolbar_detail);
+    /**
+     * 初始化布局
+     */
+    private void initView() {
+        meetDetail = (LinearLayout) findViewById(R.id.meeting_detail);
         detailTitle = (TextView) findViewById(R.id.detail_title);
         detailContent = (TextView) findViewById(R.id.detail_content);
         detailLocation = (TextView) findViewById(R.id.detail_location);
-        detailDate = (TextView) findViewById(R.id.detail_date);
-        detailPerson = (TextView) findViewById(R.id.detail_person);
+        detailDuration = (TextView) findViewById(R.id.detail_duration);
         detailRemark = (TextView) findViewById(R.id.detail_remark);
         detailVisible = (TextView) findViewById(R.id.detail_visible);
-
-        toolbarDetail.setTitle("Meeting");
+        checkTime = (Button) findViewById(R.id.check_time);
+        toolbarDetail = (Toolbar) findViewById(R.id.toolbar_detail);
         setSupportActionBar(toolbarDetail);
         toolbarDetail.setNavigationIcon(R.mipmap.toolbar_back);
+
+    }
+
+    private void initListener() {
         toolbarDetail.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,20 +80,79 @@ public class DetailActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_share:
-                        Intent intent = new Intent(DetailActivity.this,ShareActivity.class);
+                        Intent intent = new Intent(DetailActivity.this, SelectActivity.class);
+                        intent.putExtra("meetId", meetId);
                         startActivity(intent);
                         break;
                 }
                 return false;
             }
         });
+        checkTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailActivity.this, TimeActivity.class);
+                intent.putExtra("meetId",meetId);
+                startActivity(intent);
+            }
+        });
+    }
 
+    private void showData() {
+        progressDialog = ProgressDialog.show(DetailActivity.this, null, "请稍等....", true);
+        String url = SysConstants.BaseUrl + SysConstants.DoFindMeeting;
+        url = UrlParamCompleter.complete(url, meetId);
+        Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    detailTitle.setText(jsonObject.getString("title"));
+                    detailLocation.setText(jsonObject.getString("location"));
+                    detailContent.setText(jsonObject.getString("content"));
+                    detailRemark.setText(jsonObject.getString("remark"));
+                    String durationString;
+                    int durationCount = Integer.parseInt(jsonObject.getString("duration"));
+                    double duration = durationCount / 4.0;
+                    if (duration == 0.25) {
+                        durationString = "15分钟";
+                    } else if (duration == 24) {
+                        durationString = "全天";
+                    } else {
+                        durationString = duration + "小时";
+                    }
+                    detailDuration.setText(durationString);
+                    String visible = jsonObject.getString("visible");
+                    if (visible.equals("1")) {
+                        detailVisible.setText("所有人可见");
+                    } else {
+                        detailVisible.setText("只有我可见");
+                    }
+                    meetDetail.setVisibility(View.VISIBLE);
+                    progressDialog.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                progressDialog.dismiss();
+                Log.e(TAG, volleyError.getMessage(), volleyError);
+                Toast.makeText(context, "网络连接有问题！", Toast.LENGTH_SHORT).show();
+            }
+        };
+        StringRequest request = new StringRequest(Request.Method.GET, url, listener, errorListener);
+        VolleyUtil.getRequestQueue(context).cancelAll(TAG);
+        request.setTag(TAG);
+        VolleyUtil.getRequestQueue(context).add(request);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_menu,menu);
+        getMenuInflater().inflate(R.menu.share_menu, menu);
         return true;
     }
 }

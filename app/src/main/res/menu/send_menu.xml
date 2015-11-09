@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/exit_menu"
-        android:title="结束"
-        app:showAsAction="ifRoom"/>
+        android:id="@+id/send_menu"
+        android:icon="@drawable/send"
+        android:title="发送"
+        app:showAsAction="always"/>
 
 </menu>

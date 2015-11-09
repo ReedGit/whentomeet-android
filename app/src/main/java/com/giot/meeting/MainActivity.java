@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,8 +14,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.giot.meeting.fragments.AboutFragment;
@@ -24,25 +26,25 @@ import com.giot.meeting.fragments.ContactFragment;
 import com.giot.meeting.fragments.MeetingFragment;
 import com.giot.meeting.fragments.PasswordFragment;
 
+import java.awt.font.TextAttribute;
 
-/**
- * Created by 伟 on 2015/9/29.
- */
+
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
     private NavigationView navigationView;
-    private Fragment meetingFragment, contactFragment, passwordFragment, aboutFragment;
+    private Fragment meetingFragment;
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
     private long exitTime;
+    private MeetApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        app = (MeetApplication) getApplication();
         initView();
         navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
@@ -51,10 +53,14 @@ public class MainActivity extends AppCompatActivity {
     public void initView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(Color.BLACK);
         setSupportActionBar(toolbar);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+        View drawerHeader = navigationView.inflateHeaderView(R.layout.drawer_header);
+        TextView tvUsername = (TextView) drawerHeader.findViewById(R.id.head_username);
+        Intent intent = getIntent();
+        tvUsername.setText(intent.getStringExtra("nickName"));
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerToggle.syncState();
         drawerLayout.setDrawerListener(drawerToggle);
         fragmentManager = getSupportFragmentManager();
@@ -72,24 +78,30 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager = getSupportFragmentManager();
             transaction = fragmentManager.beginTransaction();
             drawerLayout.closeDrawers();
+            menuItem.setChecked(true);
             switch (menuItem.getItemId()) {
                 case R.id.drawer_meeting:
+                    toolbar.setTitle("Meeting");
                     meetingFragment = new MeetingFragment();
                     transaction.replace(R.id.main_frame, meetingFragment);
                     transaction.commit();
                     break;
                 case R.id.drawer_contact:
-                    contactFragment = new ContactFragment();
+                    toolbar.setTitle("联系人");
+                    ContactFragment contactFragment = new ContactFragment();
                     transaction.replace(R.id.main_frame, contactFragment);
                     transaction.commit();
                     break;
                 case R.id.drawer_password:
-                    passwordFragment = new PasswordFragment();
+                    Toast.makeText(getApplicationContext(),"暂未开放此功能！",Toast.LENGTH_SHORT).show();
+                    /*toolbar.setTitle("修改密码");
+                    PasswordFragment passwordFragment = new PasswordFragment();
                     transaction.replace(R.id.main_frame, passwordFragment);
-                    transaction.commit();
+                    transaction.commit();*/
                     break;
                 case R.id.drawer_about:
-                    aboutFragment = new AboutFragment();
+                    toolbar.setTitle("关于我们");
+                    AboutFragment aboutFragment = new AboutFragment();
                     transaction.replace(R.id.main_frame, aboutFragment);
                     transaction.commit();
                     break;
@@ -100,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     builder.setPositiveButton("退出", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            app.setIsLogin(false);
                             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                             startActivity(intent);
                             dialogInterface.dismiss();
@@ -141,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 
 
 }

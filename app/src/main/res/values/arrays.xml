@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="spinnerhour">
-        <item>1h</item>
-        <item>2h</item>
-        <item>3h</item>
+    <string-array name="spinner_hour">
+        <item>15分钟</item>
+        <item>0.5小时</item>
+        <item>1小时</item>
+        <item>1.5小时</item>
+        <item>2小时</item>
+        <item>2.5小时</item>
+        <item>3小时</item>
+        <item>4小时</item>
+        <item>5小时</item>
+        <item>6小时</item>
+        <item>全天</item>
     </string-array>
 </resources>

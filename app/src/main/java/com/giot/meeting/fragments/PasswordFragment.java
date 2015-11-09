@@ -1,5 +1,6 @@
 package com.giot.meeting.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -14,15 +15,13 @@ import android.widget.Toast;
 import com.giot.meeting.LoginActivity;
 import com.giot.meeting.R;
 
-/**
- * Created by 伟 on 2015/10/6.
- */
 public class PasswordFragment extends Fragment {
 
     private TextInputLayout textInputLayoutOldPassword, textInputLayoutNewPassword, textInputLayoutNewRe;
     private EditText editTextOldPassword, editTextNewPassword, editTextNewRe;
     private Button buttonUpdatePassword;
     private String oldPassword, newPassword, newRe;
+    private Context context = getActivity().getApplicationContext();
 
 
     @Override
@@ -78,7 +77,7 @@ public class PasswordFragment extends Fragment {
                 textInputLayoutNewRe.setErrorEnabled(false);
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
-                Toast.makeText(getActivity(), "密码修改成功！请重新登录！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "密码修改成功！请重新登录！", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
         });

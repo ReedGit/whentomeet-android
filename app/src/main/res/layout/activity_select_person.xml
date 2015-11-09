@@ -7,7 +7,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="3dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_share"
@@ -21,38 +22,31 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="选择分发方式"
+            android:text="参与人员"
             android:textColor="#FFFFFF"
             android:textSize="25sp" />
     </RelativeLayout>
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal">
-<!--
-        <RelativeLayout
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/share_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp">-->
+            android:padding="8dp" />
 
-            <ImageButton
-                android:id="@+id/share_email"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@mipmap/ic_launcher" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_share_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/add" />
 
-            <ImageButton
-                android:id="@+id/share_wechat"
-                android:layout_marginLeft="70dp"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@mipmap/ic_launcher" />
+    </android.support.design.widget.CoordinatorLayout>
 
- <!--       </RelativeLayout>-->
-
-    </LinearLayout>
 
 </LinearLayout>

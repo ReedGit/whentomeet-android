@@ -4,19 +4,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_meeting"
+            android:icon="@drawable/home"
             android:checked="true"
             android:title="我的meeting"/>
         <item
+            android:icon="@drawable/group"
             android:id="@+id/drawer_contact"
             android:title="联系人列表"/>
         <item
             android:id="@+id/drawer_password"
+            android:icon="@drawable/set"
             android:title="修改密码"/>
         <item
             android:id="@+id/drawer_about"
+            android:icon="@drawable/about"
             android:title="关于我们"/>
         <item
             android:id="@+id/drawer_exit"
+            android:icon="@drawable/out"
             android:title="退出登录"/>
     </group>
 </menu>
