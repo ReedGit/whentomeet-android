@@ -5,17 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="3dp">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_share"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/toolbarColor"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:background="@color/toolbarColor"
+        android:elevation="3dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,11 +19,12 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:text="参与人员"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="25sp" />
-    </RelativeLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -37,16 +34,33 @@
             android:layout_height="wrap_content"
             android:padding="8dp" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_share_person"
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/add_way"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/add" />
+            android:layout_marginRight="20dp">
 
-    </android.support.design.widget.CoordinatorLayout>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/new_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/pen"
+                app:fab_label="新建联系人"
+                app:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/select_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/user_add"
+                app:fab_label="从联系人列表添加"
+                app:fab_size="mini" />
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+    </FrameLayout>
 
 
 </LinearLayout>

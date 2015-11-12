@@ -36,11 +36,30 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
         this.list = list;
     }
 
+    public interface OnItemClickListener{
+        void OnItemLongClick(View view, int position);
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
     @Override
-    public void onBindViewHolder(ContactViewHolder holder, int position) {
+    public void onBindViewHolder(final ContactViewHolder holder, final int position) {
         try {
             holder.contactInvited.setText(list.get(position).getString("username"));
             holder.contactName.setText(list.get(position).getString("nickname"));
+            if (mOnItemClickListener != null) {
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        mOnItemClickListener.OnItemLongClick(holder.itemView, position);
+                        return true;
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

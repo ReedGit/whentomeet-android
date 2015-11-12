@@ -12,9 +12,4 @@
         android:title="微信"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/exit_menu"
-        android:title="结束"
-        app:showAsAction="never"/>
-
 </menu>

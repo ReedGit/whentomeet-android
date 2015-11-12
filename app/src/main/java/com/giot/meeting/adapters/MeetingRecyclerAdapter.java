@@ -1,27 +1,23 @@
 package com.giot.meeting.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.giot.meeting.DetailActivity;
 import com.giot.meeting.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 
 public class MeetingRecyclerAdapter extends RecyclerView.Adapter<MeetingRecyclerAdapter.MeetingViewHolder> {
 
     private LayoutInflater layoutInflater;
-    private Context context;
     private List<JSONObject> list;
 
     public class MeetingViewHolder extends RecyclerView.ViewHolder {
@@ -38,6 +34,8 @@ public class MeetingRecyclerAdapter extends RecyclerView.Adapter<MeetingRecycler
 
     public interface OnItemClickListener {
         void OnItemClick(View view, int position);
+
+        void OnItemLongClick(View view, int position);
     }
 
     private OnItemClickListener mOnItemClickListener;
@@ -47,7 +45,6 @@ public class MeetingRecyclerAdapter extends RecyclerView.Adapter<MeetingRecycler
     }
 
     public MeetingRecyclerAdapter(Context context, List<JSONObject> list) {
-        this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.list = list;
 
@@ -60,13 +57,21 @@ public class MeetingRecyclerAdapter extends RecyclerView.Adapter<MeetingRecycler
             holder.textCreateTime.setText(list.get(position).getString("createTime"));
             String person = list.get(position).getString("response") + "/" + list.get(position).getString("guys");
             holder.textPerson.setText(person);
-            if (mOnItemClickListener != null)
+            if (mOnItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mOnItemClickListener.OnItemClick(holder.itemView, position);
                     }
                 });
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        mOnItemClickListener.OnItemLongClick(holder.itemView, position);
+                        return true;
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

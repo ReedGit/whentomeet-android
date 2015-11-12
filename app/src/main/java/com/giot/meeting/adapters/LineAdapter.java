@@ -2,7 +2,6 @@ package com.giot.meeting.adapters;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +69,7 @@ public class LineAdapter extends BaseExpandableListAdapter {
     @Override
     public long getChildId(int i, int i1) {
         int count = 0;
-        for (int j = 0; j < i ; j++)
+        for (int j = 0; j < i; j++)
             count = count + getChildrenCount(j);
         count = count + i1;
         return count;
@@ -104,7 +103,7 @@ public class LineAdapter extends BaseExpandableListAdapter {
                 JSONArray jsonArray = selectedJson.getJSONArray(Long.toString(getChildId(i, i1)));
                 String personName = "";
                 for (int j = 0; j < jsonArray.length(); j++) {
-                    personName = personName  + jsonArray.getString(j) + ", ";
+                    personName = personName + jsonArray.getString(j) + ", ";
                 }
                 viewHolder.childPerson.setText(personName);
             }

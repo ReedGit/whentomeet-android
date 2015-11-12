@@ -19,7 +19,7 @@
         android:paddingRight="5dp"
         android:orientation="horizontal"
         android:background="#FFFFFF"
-        android:gravity="center">
+        android:gravity="center_vertical">
 
         <FrameLayout
             android:layout_width="wrap_content"

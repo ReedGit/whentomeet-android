@@ -1,7 +1,6 @@
 package com.giot.meeting;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -114,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"两次输入的密码不同",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                exitUsername();
+                existUsername();
             }
         });
     }
@@ -122,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
     /**
      * 验证邮箱是否注册
      */
-    protected void exitUsername() {
+    protected void existUsername() {
 
         progressDialog = ProgressDialog.show(RegisterActivity.this, null, "注册ing...", true);
 
@@ -133,7 +132,6 @@ public class RegisterActivity extends AppCompatActivity {
         StringRequest existRequest = new StringRequest(Method.GET, urlFind, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                Log.i(TAG, s);
                 if (Boolean.parseBoolean(s)) {
                     progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "该邮箱已被注册了，换一个吧！", Toast.LENGTH_SHORT).show();
@@ -149,8 +147,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "网络连接有问题", Toast.LENGTH_SHORT).show();
             }
         });
-        VolleyUtil.getRequestQueue(this).cancelAll(this);
-        existRequest.setTag(this);
+        VolleyUtil.getRequestQueue(this).cancelAll(TAG);
+        existRequest.setTag(TAG);
         VolleyUtil.getRequestQueue(this).add(existRequest);
     }
 
@@ -166,9 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(String s) {
                 progressDialog.dismiss();
                 if (s != null) {
-                    Toast.makeText(getApplicationContext(), "恭喜您成为我们的新用户!请前往注册邮箱激活账户!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(), "欢迎加入我们！记得去邮箱激活哦！", Toast.LENGTH_LONG).show();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "很抱歉，您注册失败了，请重新尝试!", Toast.LENGTH_LONG).show();
@@ -180,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 progressDialog.dismiss();
                 Log.e(TAG, volleyError.getMessage(), volleyError);
-                Toast.makeText(getApplicationContext(), "网络连接有问题", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), SysConstants.errorString, Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -194,8 +190,8 @@ public class RegisterActivity extends AppCompatActivity {
                 return registerMap;
             }
         };
-        VolleyUtil.getRequestQueue(this).cancelAll(this);
-        registerRequest.setTag(this);
+        VolleyUtil.getRequestQueue(this).cancelAll(TAG);
+        registerRequest.setTag(TAG);
         VolleyUtil.getRequestQueue(this).add(registerRequest);
     }
 

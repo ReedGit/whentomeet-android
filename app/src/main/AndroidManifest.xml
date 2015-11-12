@@ -20,7 +20,9 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".NewMeetingActivity"/>
         <activity android:name=".DetailActivity"/>
-        <activity android:name=".SelectActivity"/>
+        <activity
+            android:name=".SelectActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".TimeActivity"/>
 
     </application>

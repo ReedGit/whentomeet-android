@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/toolbarColor"
+        android:elevation="5dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -212,7 +213,6 @@
                 android:layout_marginLeft="60dp"
                 android:layout_marginBottom="20dp"
                 android:textSize="16sp"
-                android:text="时间"
                 android:textColor="#000000"/>
 
         </LinearLayout>

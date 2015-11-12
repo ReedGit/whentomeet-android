@@ -32,12 +32,13 @@ public class DetailActivity extends AppCompatActivity {
     private final static String TAG = DetailActivity.class.toString();
 
     private Toolbar toolbarDetail;
-    private TextView detailTitle, detailContent, detailLocation, detailDuration, detailRemark, detailVisible;
+    private TextView detailTitle, detailContent, detailLocation, detailDuration, detailRemark, detailVisible, confirmTime;
     private String meetId;
     private Context context;
     private ProgressDialog progressDialog;
     private LinearLayout meetDetail;
     private Button checkTime;
+    private String meetTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class DetailActivity extends AppCompatActivity {
         detailVisible = (TextView) findViewById(R.id.detail_visible);
         checkTime = (Button) findViewById(R.id.check_time);
         toolbarDetail = (Toolbar) findViewById(R.id.toolbar_detail);
+        confirmTime = (TextView) findViewById(R.id.confirm_time);
         setSupportActionBar(toolbarDetail);
         toolbarDetail.setNavigationIcon(R.mipmap.toolbar_back);
 
@@ -82,6 +84,7 @@ public class DetailActivity extends AppCompatActivity {
                     case R.id.action_share:
                         Intent intent = new Intent(DetailActivity.this, SelectActivity.class);
                         intent.putExtra("meetId", meetId);
+                        intent.putExtra("meetTheme", meetTheme);
                         startActivity(intent);
                         break;
                 }
@@ -92,8 +95,9 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailActivity.this, TimeActivity.class);
-                intent.putExtra("meetId",meetId);
-                startActivity(intent);
+                intent.putExtra("meetId", meetId);
+                intent.putExtra("meetTheme", meetTheme);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -107,10 +111,15 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(String s) {
                 try {
                     JSONObject jsonObject = new JSONObject(s);
-                    detailTitle.setText(jsonObject.getString("title"));
+                    meetTheme = jsonObject.getString("title");
+                    detailTitle.setText(meetTheme);
                     detailLocation.setText(jsonObject.getString("location"));
                     detailContent.setText(jsonObject.getString("content"));
                     detailRemark.setText(jsonObject.getString("remark"));
+                    if (!(jsonObject.getString("confirmTime").equals("null"))) {
+                        confirmTime.setText(jsonObject.getString("confirmTime"));
+                        toolbarDetail.getMenu().clear();
+                    }
                     String durationString;
                     int durationCount = Integer.parseInt(jsonObject.getString("duration"));
                     double duration = durationCount / 4.0;
@@ -154,5 +163,13 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.share_menu, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1) {
+            toolbarDetail.getMenu().clear();
+            confirmTime.setText(data.getStringExtra("confirmTime"));
+        }
     }
 }

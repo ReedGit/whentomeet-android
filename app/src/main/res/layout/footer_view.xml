@@ -6,14 +6,16 @@
     android:orientation="horizontal">
 
     <ProgressBar
+        android:id="@+id/progress_bar"
         android:layout_width="20dp"
         android:layout_height="20dp" />
 
     <TextView
+        android:id="@+id/tv_load"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:text="加载中...."/>
 
 </LinearLayout>

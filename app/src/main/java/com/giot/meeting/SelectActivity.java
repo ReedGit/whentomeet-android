@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,11 +23,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.giot.meeting.adapters.ContactSelectAdapter;
 import com.giot.meeting.adapters.ShareRecyclerAdapter;
 import com.giot.meeting.configs.SysConstants;
+import com.giot.meeting.utils.UrlParamCompleter;
 import com.giot.meeting.utils.VolleyUtil;
 import com.giot.meeting.widgets.DividerItemDecoration;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,7 +55,12 @@ public class SelectActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private MeetApplication app;
     private String meetId;
-    private FloatingActionButton btAdd;
+    private String meetTheme;
+    private FloatingActionMenu addWay;
+    private FloatingActionButton selectPerson, newPerson;
+    private ContactSelectAdapter selectAdapter;
+    private RecyclerView selectRecycler;
+    private List<JSONObject> list;
 
 
     @Override
@@ -60,6 +69,7 @@ public class SelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_person);
         Intent intent = getIntent();
         meetId = intent.getStringExtra("meetId");
+        meetTheme = intent.getStringExtra("meetTheme");
         initView();
         initListener();
     }
@@ -68,7 +78,9 @@ public class SelectActivity extends AppCompatActivity {
         context = getApplicationContext();
         app = (MeetApplication) getApplication();
         toolbarShare = (Toolbar) findViewById(R.id.toolbar_share);
-        btAdd = (FloatingActionButton) findViewById(R.id.add_share_person);
+        addWay = (FloatingActionMenu) findViewById(R.id.add_way);
+        selectPerson = (FloatingActionButton) findViewById(R.id.select_person);
+        newPerson = (FloatingActionButton) findViewById(R.id.new_person);
         toolbarShare.setTitle("");
         setSupportActionBar(toolbarShare);
         toolbarShare.setNavigationIcon(R.mipmap.toolbar_back);
@@ -80,6 +92,7 @@ public class SelectActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.setHasFixedSize(true);
 
         adapter.setOnItemClickListener(new ShareRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -96,9 +109,11 @@ public class SelectActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        btAdd.setOnClickListener(new View.OnClickListener() {
+        //新建联系人
+        newPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addWay.close(true);
                 View layout = getLayoutInflater().inflate(R.layout.input_share, null);
                 etName = (EditText) layout.findViewById(R.id.share_name);
                 etEmail = (EditText) layout.findViewById(R.id.share_email);
@@ -115,15 +130,9 @@ public class SelectActivity extends AppCompatActivity {
                         } else if (!emailString.matches(SysConstants.RuleMail)) {
                             Toast.makeText(context, "邮箱格式不正确！", Toast.LENGTH_SHORT).show();
                         } else {
-                            for (int j = 0; j < email.size(); j++) {
-                                if (emailString.equals(email.get(j))) {
-                                    Toast.makeText(context, "您已添加过该联系人！", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                            if (!addPerson(emailString, nameString)) {
+                                Toast.makeText(context, "您已添加过该联系人！", Toast.LENGTH_SHORT).show();
                             }
-                            name.add(name.size(), nameString);
-                            email.add(email.size(), emailString);
-                            adapter.notifyItemInserted(email.size() - 1);
                         }
                     }
                 });
@@ -131,6 +140,68 @@ public class SelectActivity extends AppCompatActivity {
                 builder.create().show();
             }
         });
+
+        //从联系人列表添加
+        selectPerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addWay.close(true);
+                list = new ArrayList<>();
+                String url = SysConstants.BaseUrl + SysConstants.DoFindAllContact;
+                url = UrlParamCompleter.complete(url, app.getUser());
+
+                Response.Listener<String> listener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(s);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                list.add(jsonArray.getJSONObject(i));
+                            }
+                            View layout = getLayoutInflater().inflate(R.layout.dialog_contact, null);
+                            selectRecycler = (RecyclerView) layout.findViewById(R.id.contact_select);
+                            selectAdapter = new ContactSelectAdapter(SelectActivity.this, list);
+                            selectRecycler.setLayoutManager(new LinearLayoutManager(SelectActivity.this));
+                            selectRecycler.addItemDecoration(new DividerItemDecoration(SelectActivity.this, DividerItemDecoration.VERTICAL_LIST));
+                            selectRecycler.setAdapter(selectAdapter);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SelectActivity.this);
+                            builder.setView(layout);
+                            builder.setTitle("联系人列表");
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    List<Integer> positionList = selectAdapter.getListSelect();
+                                    try {
+                                        for (int j = 0; j < positionList.size(); j++) {
+                                            addPerson(list.get(positionList.get(j)).getString("username"), list.get(positionList.get(j)).getString("nickname"));
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            builder.setNegativeButton("取消", null);
+                            builder.setCancelable(false);
+                            builder.create().show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e(TAG, volleyError.getMessage(), volleyError);
+                        Toast.makeText(context, "网络连接有问题", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                StringRequest dataRequest = new StringRequest(Request.Method.GET, url, listener, errorListener);
+                VolleyUtil.getRequestQueue(context).cancelAll(TAG);
+                dataRequest.setTag(TAG);
+                VolleyUtil.getRequestQueue(context).add(dataRequest);
+            }
+        });
+
         toolbarShare.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,6 +227,23 @@ public class SelectActivity extends AppCompatActivity {
 
     }
 
+    private Boolean addPerson(String emailString, String nameString) {
+        Boolean result = true;
+        for (int j = 0; j < email.size(); j++) {
+            if (emailString.equals(email.get(j))) {
+                result = false;
+                break;
+            }
+        }
+        if (result) {
+            name.add(nameString);
+            email.add(emailString);
+            adapter.notifyItemInserted(email.size() - 1);
+        }
+        return result;
+    }
+
+    //发送邮件
     private void sendEmail() {
         progressDialog = ProgressDialog.show(SelectActivity.this, null, "发送中......", true);
         String url = SysConstants.BaseUrl + SysConstants.DoSendMail;
@@ -201,17 +289,14 @@ public class SelectActivity extends AppCompatActivity {
                 map.put("emailString", emailString);
                 map.put("nameString", nameString);
                 map.put("userId", app.getUser());
+                map.put("meetTheme", meetTheme);
+                Log.i(TAG, nameString + " " + emailString + " " + meetTheme + " " + meetId);
                 return map;
             }
         };
-        VolleyUtil.getRequestQueue(context).
-
-                cancelAll(TAG);
-
+        VolleyUtil.getRequestQueue(context).cancelAll(TAG);
         request.setTag(TAG);
-        VolleyUtil.getRequestQueue(context).
-
-                add(request);
+        VolleyUtil.getRequestQueue(context).add(request);
     }
 
     @Override

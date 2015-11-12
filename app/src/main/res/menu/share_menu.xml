@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_share"
         android:title="分享"
-        android:icon="@mipmap/menu_share"
+        android:icon="@mipmap/user_add"
         app:showAsAction="ifRoom" />
 
 </menu>

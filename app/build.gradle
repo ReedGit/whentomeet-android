@@ -30,4 +30,6 @@ dependencies {
     compile 'com.squareup.okio:okio:1.6.0'
     compile files('libs/volley.jar')
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
+    compile 'com.github.clans:fab:1.6.1'
+
 }

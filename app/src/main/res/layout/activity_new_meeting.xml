@@ -4,18 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_new_meeting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="3dp">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_new_meeting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/toolbarColor"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:background="@color/toolbarColor"
+        android:elevation="5dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,9 +20,9 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:text="编辑MEET"
+            android:textColor="#000000"
             android:textSize="25sp" />
-
-    </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,10 +39,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
+                android:paddingBottom="5dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textInputLayout_title"
@@ -56,9 +53,9 @@
                         android:id="@+id/editText_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@null"
                         android:paddingTop="10dp"
-                        android:textSize="16sp"
-                        android:background="@null" />
+                        android:textSize="16sp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
@@ -67,10 +64,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="#FFFFFF"
+                android:paddingBottom="5dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textInputLayout_content"
@@ -81,9 +78,9 @@
                         android:id="@+id/editText_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@null"
                         android:paddingTop="10dp"
-                        android:textSize="16sp"
-                        android:background="@null" />
+                        android:textSize="16sp" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -93,10 +90,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="#FFFFFF"
+                android:paddingBottom="5dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textInputLayout_location"
@@ -107,9 +104,9 @@
                         android:id="@+id/editText_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@null"
                         android:paddingTop="10dp"
-                        android:textSize="16sp"
-                        android:background="@null" />
+                        android:textSize="16sp" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -126,6 +123,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
                     android:text="时长："
                     android:textSize="15sp" />
 
@@ -142,15 +140,16 @@
                 android:layout_marginTop="1dp"
                 android:background="#FFFFFF"
                 android:orientation="vertical"
+                android:paddingBottom="5dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:textColor="@color/colorAccent"
                     android:text="备注"
                     android:textSize="15sp" />
 
@@ -158,14 +157,14 @@
                     android:id="@+id/editText_remark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:textSize="16sp"
                     android:background="@null"
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:maxLines="3"
                     android:minLines="3"
-                    android:scrollbars="vertical" />
+                    android:paddingTop="5dp"
+                    android:scrollbars="vertical"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -182,8 +181,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/colorAccent"
                     android:text="开始时间（点击选择的时间可以取消选择）："
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:id="@+id/add_layout"
@@ -211,16 +211,17 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@id/imageView_date"
+                        android:textColor="@color/colorAccent"
                         android:text="点击选择开始时间"
-                        android:textStyle="bold"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -228,6 +229,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
                         android:text="其他人可见："
                         android:textSize="15sp" />
 

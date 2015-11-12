@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         initView();
         sp = getSharedPreferences("saveName", MODE_PRIVATE);
-        editTextEmail.setText(sp.getString("email",""));
-        editTextPassword.setText(sp.getString("password",""));
+        editTextEmail.setText(sp.getString("email", ""));
+        editTextPassword.setText(sp.getString("password", ""));
         initListener();
     }
 
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     protected void login(final String email, final String password) {
         //显示进度条
-        progressDialog = ProgressDialog.show(LoginActivity.this, null, "登录ing...", true);
+        progressDialog = ProgressDialog.show(LoginActivity.this, null, "努力登录中(๑•̀ㅂ•́)و✧", false, false);
 
         String loginUrl = SysConstants.BaseUrl + SysConstants.DoGetUser;
         loginUrl = UrlParamCompleter.complete(loginUrl, email, password);
@@ -90,28 +90,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             app.setUser(jsonObject.getString("userid"));
                             app.setEmail(jsonObject.getString("username"));
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("nickName",jsonObject.getString("nickname"));
+                            intent.putExtra("nickName", jsonObject.getString("nickname"));
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(getApplicationContext(), "你的账户尚未激活，请前往您的邮箱激活！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "快去邮箱把你的账号激活了(〃＞皿＜)", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }else {
-                    Toast.makeText(getApplicationContext(),"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "用户名或密码错误", Toast.LENGTH_SHORT).show();
                 }
 
             }
         }, new ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        progressDialog.dismiss();
-                        Log.e(TAG, volleyError.getMessage(), volleyError);
-                        Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
-                    }
-                }
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                progressDialog.dismiss();
+                Log.e(TAG, volleyError.getMessage(), volleyError);
+                Toast.makeText(getApplicationContext(), SysConstants.errorString, Toast.LENGTH_SHORT).show();
+            }
+        }
 
         );
         VolleyUtil.getRequestQueue(this).cancelAll(this);
@@ -125,17 +125,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         switch (view.getId()) {
             case R.id.imageButton_weChat:
+                Toast.makeText(getApplicationContext(),"功能开发中......",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_login:
                 String email = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
                 if (email.isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"邮箱不能为空",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "邮箱不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (password.isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"密码不能为空",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 login(email, password);
