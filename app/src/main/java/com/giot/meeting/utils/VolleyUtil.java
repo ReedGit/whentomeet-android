@@ -2,6 +2,7 @@ package com.giot.meeting.utils;
 
 import android.content.Context;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
@@ -22,6 +23,12 @@ public class VolleyUtil {
             }
         }
         return requestQueue;
+    }
+
+    public static void addRequest(Context context, Request request, Object TAG){
+        getRequestQueue(context).cancelAll(TAG);
+        request.setTag(TAG);
+        getRequestQueue(context).add(request);
     }
 }
 

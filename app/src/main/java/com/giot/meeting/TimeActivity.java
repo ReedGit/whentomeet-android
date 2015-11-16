@@ -127,9 +127,7 @@ public class TimeActivity extends AppCompatActivity {
             }
         };
         StringRequest request = new StringRequest(Request.Method.GET, url, listener, errorListener);
-        VolleyUtil.getRequestQueue(context).cancelAll(TAG);
-        request.setTag(TAG);
-        VolleyUtil.getRequestQueue(context).add(request);
+        VolleyUtil.addRequest(TimeActivity.this, request, TAG);
     }
 
     //被邀请人选择的时间
@@ -204,9 +202,7 @@ public class TimeActivity extends AppCompatActivity {
             }
         };
         StringRequest request = new StringRequest(Request.Method.GET, url, listener, errorListener);
-        VolleyUtil.getRequestQueue(context).cancelAll(TAG);
-        request.setTag(TAG);
-        VolleyUtil.getRequestQueue(context).add(request);
+        VolleyUtil.addRequest(TimeActivity.this, request, TAG);
     }
 
     /**
@@ -260,9 +256,7 @@ public class TimeActivity extends AppCompatActivity {
                 return map;
             }
         };
-        VolleyUtil.getRequestQueue(context).cancelAll(TAG);
-        request.setTag(TAG);
-        VolleyUtil.getRequestQueue(context).add(request);
+        VolleyUtil.addRequest(TimeActivity.this, request, TAG);
     }
 
 }

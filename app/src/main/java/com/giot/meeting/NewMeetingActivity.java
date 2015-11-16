@@ -443,9 +443,7 @@ public class NewMeetingActivity extends AppCompatActivity {
                 return map;
             }
         };
-        VolleyUtil.getRequestQueue(this).cancelAll(this);
-        addRequest.setTag(this);
-        VolleyUtil.getRequestQueue(this).add(addRequest);
+        VolleyUtil.addRequest(NewMeetingActivity.this, addRequest, TAG);
     }
 
     /**
@@ -461,7 +459,7 @@ public class NewMeetingActivity extends AppCompatActivity {
                 if (selection == 1) {
                     Intent intent = new Intent(NewMeetingActivity.this, SelectActivity.class);
                     intent.putExtra("meetId", meetId);
-                    intent.putExtra("meetTheme",title);
+                    intent.putExtra("meetTheme", title);
                     startActivity(intent);
                     finish();
                 }
@@ -470,6 +468,7 @@ public class NewMeetingActivity extends AppCompatActivity {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                mProgressDialog.dismiss();
                 Log.e(TAG, volleyError.getMessage(), volleyError);
                 Toast.makeText(getApplicationContext(), "网络出现错误！", Toast.LENGTH_SHORT).show();
             }
@@ -491,9 +490,7 @@ public class NewMeetingActivity extends AppCompatActivity {
                 return map;
             }
         };
-        VolleyUtil.getRequestQueue(this).cancelAll(this);
-        timeRequest.setTag(this);
-        VolleyUtil.getRequestQueue(this).add(timeRequest);
+        VolleyUtil.addRequest(NewMeetingActivity.this, timeRequest, TAG);
     }
 
     /**

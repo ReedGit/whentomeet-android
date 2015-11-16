@@ -52,8 +52,6 @@ public class MeetingFragment extends Fragment {
     public List<JSONObject> list;
     private MeetApplication app;
     private int pageCount;
-    //private HeaderViewRecyclerAdapter recyclerAdapter;
-    //private View loadMoreView;
     private int page = 0;
 
     @Override
@@ -70,9 +68,7 @@ public class MeetingFragment extends Fragment {
         FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.add_meeting);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.meeting_refresh);
 
-        /**
-         * 设置recyclerView适配器、布局、动画效果以及分割线
-         */
+        //设置recyclerView适配器、布局、动画效果以及分割线
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         list = new ArrayList<>();
@@ -81,9 +77,7 @@ public class MeetingFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-        /**
-         * 下拉刷新
-         */
+        //下拉刷新
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -93,16 +87,7 @@ public class MeetingFragment extends Fragment {
             }
         });
 
-        /**
-         * 上拉加载
-         */
-       /* recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page) {
-                Log.i(TAG, "当前page:" + page);
-                loadMoreData(page);
-            }
-        });*/
+        //上拉加载
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             int visibleLastIndex = 0;
@@ -124,9 +109,6 @@ public class MeetingFragment extends Fragment {
             }
         });
 
-        /**
-         * 新建meeting
-         */
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,11 +119,11 @@ public class MeetingFragment extends Fragment {
         return view;
     }
 
+    //上拉加载数据
     private void loadMoreData() {
         if ((page / SysConstants.items) < pageCount) {
             Log.i(TAG, "当前page:" + page + " " + pageCount);
             page = page + SysConstants.items;
-            //loadMoreView.setVisibility(View.VISIBLE);
             String url = SysConstants.BaseUrl + SysConstants.DoFindAllMeeting;
             url = UrlParamCompleter.complete(url, app.getUser(), Integer.toString(page));
             Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
@@ -169,26 +151,18 @@ public class MeetingFragment extends Fragment {
                 }
             };
             JsonObjectRequest dataRequest = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
-            VolleyUtil.getRequestQueue(getActivity()).cancelAll(TAG);
+            VolleyUtil.addRequest(getActivity(), dataRequest, TAG);
+            /*VolleyUtil.getRequestQueue(getActivity()).cancelAll(TAG);
             dataRequest.setTag(TAG);
-            VolleyUtil.getRequestQueue(getActivity()).add(dataRequest);
+            VolleyUtil.getRequestQueue(getActivity()).add(dataRequest);*/
         } else {
             Toast.makeText(getActivity().getApplicationContext(), "没有更多数据了", Toast.LENGTH_SHORT).show();
-            //loadMoreView.setVisibility(View.GONE);
         }
     }
 
-    /*private void createLoadMoreView() {
-        loadMoreView = LayoutInflater.from(getActivity()).inflate(R.layout.footer_view, recyclerView, false);
-        recyclerAdapter.addFooterView(loadMoreView);
-        if (pageCount > 1) {
-            loadMoreView.setVisibility(View.VISIBLE);
-        } else {
-            loadMoreView.setVisibility(View.GONE);
-        }
-    }*/
 
-    protected void meetingData(String start) {
+    //初始化数据
+    private void meetingData(String start) {
 
         String url = SysConstants.BaseUrl + SysConstants.DoFindAllMeeting;
         url = UrlParamCompleter.complete(url, app.getUser(), start);
@@ -199,9 +173,9 @@ public class MeetingFragment extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    if (jsonArray.length()==0){
+                    if (jsonArray.length() == 0) {
                         meeting.setBackgroundResource(R.mipmap.empty);
-                    }else {
+                    } else {
                         meeting.setBackgroundResource(R.color.windowBackground);
                     }
                     pageCount = jsonObject.getInt("page");
@@ -209,9 +183,7 @@ public class MeetingFragment extends Fragment {
                         list.add(jsonArray.getJSONObject(i));
                     }
                     adapter = new MeetingRecyclerAdapter(getActivity(), list);
-                    //recyclerAdapter = new HeaderViewRecyclerAdapter(adapter);
                     recyclerView.setAdapter(adapter);
-                    //createLoadMoreView();
                     adapter.setOnItemClickListener(new MeetingRecyclerAdapter.OnItemClickListener() {
                         @Override
                         public void OnItemClick(View view, int position) {
@@ -254,9 +226,10 @@ public class MeetingFragment extends Fragment {
             }
         };
         StringRequest dataRequest = new StringRequest(Request.Method.GET, url, listener, errorListener);
-        VolleyUtil.getRequestQueue(getActivity()).cancelAll(TAG);
+        VolleyUtil.addRequest(getActivity(), dataRequest, TAG);
+        /*VolleyUtil.getRequestQueue(getActivity()).cancelAll(TAG);
         dataRequest.setTag(TAG);
-        VolleyUtil.getRequestQueue(getActivity()).add(dataRequest);
+        VolleyUtil.getRequestQueue(getActivity()).add(dataRequest);*/
     }
 
     private void deleteMeet(final String meetId, final int position) {
@@ -273,9 +246,9 @@ public class MeetingFragment extends Fragment {
                     adapter.notifyItemRangeChanged(position, list.size() - position);
                 }
                 Toast.makeText(getActivity().getApplicationContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                if (list.size()==0){
+                if (list.size() == 0) {
                     meeting.setBackgroundResource(R.mipmap.empty);
-                }else {
+                } else {
                     meeting.setBackgroundResource(R.color.windowBackground);
                 }
             }

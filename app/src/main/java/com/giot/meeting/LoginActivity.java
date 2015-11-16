@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     protected void login(final String email, final String password) {
         //显示进度条
-        progressDialog = ProgressDialog.show(LoginActivity.this, null, "努力登录中(๑•̀ㅂ•́)و✧", false, false);
+        progressDialog = ProgressDialog.show(this, null, "努力登录中(๑•̀ㅂ•́)و✧", false, false);
 
         String loginUrl = SysConstants.BaseUrl + SysConstants.DoGetUser;
         loginUrl = UrlParamCompleter.complete(loginUrl, email, password);
@@ -114,9 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         );
-        VolleyUtil.getRequestQueue(this).cancelAll(this);
-        loginRequest.setTag(TAG);
-        VolleyUtil.getRequestQueue(this).add(loginRequest);
+        VolleyUtil.addRequest(LoginActivity.this, loginRequest, TAG);
     }
 
 
@@ -125,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         switch (view.getId()) {
             case R.id.imageButton_weChat:
-                Toast.makeText(getApplicationContext(),"功能开发中......",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "功能开发中......", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_login:
                 String email = editTextEmail.getText().toString();

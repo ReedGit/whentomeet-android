@@ -49,9 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
         editTextRePassword = (EditText) findViewById(R.id.editText_re_password);
         button = (Button) findViewById(R.id.button_register);
 
-        /**
-         * 设置toolbar样式
-         */
         toolbarRegister.setTitle("");
         setSupportActionBar(toolbarRegister);
         toolbarRegister.setNavigationIcon(R.mipmap.toolbar_back);
@@ -73,9 +70,6 @@ public class RegisterActivity extends AppCompatActivity {
                 password = editTextPassword.getText().toString();
                 String rePassword = editTextRePassword.getText().toString();
 
-                /*
-                 * 验证邮箱
-                 */
                 if (username == null || username.isEmpty()) {
                     Toast.makeText(getApplicationContext(),"邮箱不能为空",Toast.LENGTH_SHORT).show();
                     return;
@@ -84,17 +78,11 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                /*
-                 * 验证用户名
-                 */
                 if (nickname == null || nickname.isEmpty()) {
                     Toast.makeText(getApplicationContext(),"用户名不能为空",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                /*
-                 * 验证密码
-                 */
                 if (password == null || password.isEmpty()) {
                     Toast.makeText(getApplicationContext(),"密码不能为空",Toast.LENGTH_SHORT).show();
                     return;
@@ -103,9 +91,6 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                /*
-                 * 验证密码一致性
-                 */
                 if (rePassword.isEmpty()) {
                     Toast.makeText(getApplicationContext(),"确认密码不能为空",Toast.LENGTH_SHORT).show();
                     return;
@@ -118,12 +103,10 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * 验证邮箱是否注册
-     */
+    //验证邮箱是否注册
     protected void existUsername() {
 
-        progressDialog = ProgressDialog.show(RegisterActivity.this, null, "注册ing...", true);
+        progressDialog = ProgressDialog.show(this, null, "(ง ˙o˙)ว我们正在为您创建账号......", true);
 
         //服务器地址
         String urlFind = SysConstants.BaseUrl + SysConstants.DoFindUser;
@@ -144,17 +127,13 @@ public class RegisterActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 Log.e(TAG, volleyError.getMessage(), volleyError);
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "网络连接有问题", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), SysConstants.errorString, Toast.LENGTH_SHORT).show();
             }
         });
-        VolleyUtil.getRequestQueue(this).cancelAll(TAG);
-        existRequest.setTag(TAG);
-        VolleyUtil.getRequestQueue(this).add(existRequest);
+        VolleyUtil.addRequest(RegisterActivity.this, existRequest, TAG);
     }
 
-    /**
-     * 提交注册信息
-     */
+    //提交注册信息
     protected void postRegister() {
 
         String urlRegister = SysConstants.BaseUrl + SysConstants.DoUserRegister;
@@ -190,9 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return registerMap;
             }
         };
-        VolleyUtil.getRequestQueue(this).cancelAll(TAG);
-        registerRequest.setTag(TAG);
-        VolleyUtil.getRequestQueue(this).add(registerRequest);
+        VolleyUtil.addRequest(RegisterActivity.this, registerRequest, TAG);
     }
 
 }

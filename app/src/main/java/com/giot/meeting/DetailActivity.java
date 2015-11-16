@@ -50,10 +50,7 @@ public class DetailActivity extends AppCompatActivity {
         showData();
         initListener();
     }
-
-    /**
-     * 初始化布局
-     */
+    
     private void initView() {
         meetDetail = (LinearLayout) findViewById(R.id.meeting_detail);
         detailTitle = (TextView) findViewById(R.id.detail_title);
@@ -103,7 +100,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void showData() {
-        progressDialog = ProgressDialog.show(DetailActivity.this, null, "请稍等....", true);
+        progressDialog = ProgressDialog.show(this, null, "请稍等....", true);
         String url = SysConstants.BaseUrl + SysConstants.DoFindMeeting;
         url = UrlParamCompleter.complete(url, meetId);
         Response.Listener<String> listener = new Response.Listener<String>() {
@@ -153,9 +150,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         };
         StringRequest request = new StringRequest(Request.Method.GET, url, listener, errorListener);
-        VolleyUtil.getRequestQueue(context).cancelAll(TAG);
-        request.setTag(TAG);
-        VolleyUtil.getRequestQueue(context).add(request);
+        VolleyUtil.addRequest(DetailActivity.this, request, TAG);
     }
 
 

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -61,6 +62,7 @@ public class SelectActivity extends AppCompatActivity {
     private ContactSelectAdapter selectAdapter;
     private RecyclerView selectRecycler;
     private List<JSONObject> list;
+    private TextView textView;
 
 
     @Override
@@ -81,7 +83,8 @@ public class SelectActivity extends AppCompatActivity {
         addWay = (FloatingActionMenu) findViewById(R.id.add_way);
         selectPerson = (FloatingActionButton) findViewById(R.id.select_person);
         newPerson = (FloatingActionButton) findViewById(R.id.new_person);
-        toolbarShare.setTitle("");
+        textView = (TextView) findViewById(R.id.select_person_null);
+        toolbarShare.setTitle("选择小伙伴");
         setSupportActionBar(toolbarShare);
         toolbarShare.setNavigationIcon(R.mipmap.toolbar_back);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.share_recycler);
@@ -102,6 +105,9 @@ public class SelectActivity extends AppCompatActivity {
                 adapter.notifyItemRemoved(position);
                 if (position != email.size()) {
                     adapter.notifyItemRangeChanged(position, email.size() - position);
+                }
+                if (email.size() == 0){
+                    textView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -133,6 +139,9 @@ public class SelectActivity extends AppCompatActivity {
                             if (!addPerson(emailString, nameString)) {
                                 Toast.makeText(context, "您已添加过该联系人！", Toast.LENGTH_SHORT).show();
                             }
+                        }
+                        if (email.size() > 0){
+                            textView.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -178,6 +187,9 @@ public class SelectActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+                                    if (email.size() > 0){
+                                        textView.setVisibility(View.GONE);
+                                    }
                                 }
                             });
                             builder.setNegativeButton("取消", null);
@@ -196,9 +208,7 @@ public class SelectActivity extends AppCompatActivity {
                     }
                 };
                 StringRequest dataRequest = new StringRequest(Request.Method.GET, url, listener, errorListener);
-                VolleyUtil.getRequestQueue(context).cancelAll(TAG);
-                dataRequest.setTag(TAG);
-                VolleyUtil.getRequestQueue(context).add(dataRequest);
+                VolleyUtil.addRequest(SelectActivity.this, dataRequest, TAG);
             }
         });
 
@@ -294,9 +304,7 @@ public class SelectActivity extends AppCompatActivity {
                 return map;
             }
         };
-        VolleyUtil.getRequestQueue(context).cancelAll(TAG);
-        request.setTag(TAG);
-        VolleyUtil.getRequestQueue(context).add(request);
+        VolleyUtil.addRequest(SelectActivity.this, request, TAG);
     }
 
     @Override

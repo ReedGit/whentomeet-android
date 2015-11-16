@@ -1,66 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="false">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_share"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/toolbarColor"
-        android:elevation="3dp"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:background="@color/toolbarColor">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="参与人员"
-            android:textColor="#000000"
-            android:textSize="25sp" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_share"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" />
+    </android.support.design.widget.AppBarLayout>
 
-    </android.support.v7.widget.Toolbar>
-
-    <FrameLayout
+    <TextView
+        android:id="@+id/select_person_null"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="点击按钮添加小伙伴"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/share_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/share_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <com.github.clans.fab.FloatingActionMenu
-            android:id="@+id/add_way"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/add_way"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/new_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp">
+            android:src="@mipmap/pen"
+            app:fab_label="新建联系人"
+            app:fab_size="mini" />
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/new_person"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/pen"
-                app:fab_label="新建联系人"
-                app:fab_size="mini" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/select_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/user_add"
+            app:fab_label="从联系人列表添加"
+            app:fab_size="mini" />
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/select_person"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/user_add"
-                app:fab_label="从联系人列表添加"
-                app:fab_size="mini" />
+    </com.github.clans.fab.FloatingActionMenu>
 
-        </com.github.clans.fab.FloatingActionMenu>
-
-    </FrameLayout>
-
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

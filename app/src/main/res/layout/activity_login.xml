@@ -118,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:background="@color/toolbarColor"
+                    android:background="@color/windowBackground"
                     android:text="其他登录方式"
                     android:textColor="#FFFFFF" />
 

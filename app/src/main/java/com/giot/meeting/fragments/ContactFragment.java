@@ -58,9 +58,7 @@ public class ContactFragment extends Fragment {
         contact = (CoordinatorLayout) view.findViewById(R.id.contact);
         recyclerView = (RecyclerView) view.findViewById(R.id.contact_recycler);
 
-        /**
-         * set recyclerView's layout, animator&decoration
-         */
+        //set recyclerView's layout, animator&decoration
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         list = new ArrayList<>();
@@ -69,9 +67,6 @@ public class ContactFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-        /**
-         * pull to refresh
-         */
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -82,9 +77,7 @@ public class ContactFragment extends Fragment {
         return view;
     }
 
-    /**
-     * show contact's data
-     */
+    //show contact's data
     protected void contactData() {
         String url = SysConstants.BaseUrl + SysConstants.DoFindAllContact;
         url = UrlParamCompleter.complete(url, app.getUser());
@@ -140,9 +133,7 @@ public class ContactFragment extends Fragment {
             }
         };
         StringRequest dataRequest = new StringRequest(Request.Method.GET, url, listener, errorListener);
-        VolleyUtil.getRequestQueue(context).cancelAll(getActivity());
-        dataRequest.setTag(getActivity());
-        VolleyUtil.getRequestQueue(context).add(dataRequest);
+        VolleyUtil.addRequest(getActivity(), dataRequest, TAG);
 
     }
 
@@ -181,8 +172,6 @@ public class ContactFragment extends Fragment {
             }
         };
         StringRequest request = new StringRequest(Request.Method.GET, url, listener, errorListener);
-        VolleyUtil.getRequestQueue(getActivity()).cancelAll(TAG);
-        request.setTag(TAG);
-        VolleyUtil.getRequestQueue(getActivity()).add(request);
+        VolleyUtil.addRequest(getActivity(), request, TAG);
     }
 }
