@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             menuItem.setChecked(true);
             switch (menuItem.getItemId()) {
                 case R.id.drawer_meeting:
-                    toolbar.setTitle("Meeting");
+                    toolbar.setTitle(R.string.app_name);
                     meetingFragment = new MeetingFragment();
                     transaction.replace(R.id.main_frame, meetingFragment);
                     transaction.commit();
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     transaction.commit();*/
                     break;
                 case R.id.drawer_about:
-                    toolbar.setTitle("关于我们");
+                    toolbar.setTitle("关于聚会");
                     AboutFragment aboutFragment = new AboutFragment();
                     transaction.replace(R.id.main_frame, aboutFragment);
                     transaction.commit();

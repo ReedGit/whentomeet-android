@@ -18,7 +18,7 @@
         <item
             android:id="@+id/drawer_about"
             android:icon="@drawable/about"
-            android:title="关于我们"/>
+            android:title="关于聚会"/>
         <item
             android:id="@+id/drawer_exit"
             android:icon="@drawable/out"

@@ -4,4 +4,9 @@
     <string name="close">close</string>
     <string name="we_chat">微信</string>
     <string name="password">密码</string>
+    <string name="version_name">1.0.0</string>
+    <string name="version_flag">v</string>
+    <string name="about1">联系我们：info@geariot.com|025-52265323</string>
+    <string name="about2">Copyright © 2015 南京吉奥客电子科技有限公司</string>
+    <string name="about3">All rights reserved.</string>
 </resources>

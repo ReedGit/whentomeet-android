@@ -8,7 +8,7 @@ public class SysConstants {
     public final static int items = 5;
 
     //server address
-    public final static String BaseUrl = "http://192.168.1.103:8080/whentomeet/";
+    public final static String BaseUrl = "http://192.168.1.106:8080/whentomeet/";
 
     //login&register interface
     public final static String DoUserRegister = "addUser.do";
