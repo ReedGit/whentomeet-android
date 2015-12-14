@@ -74,6 +74,7 @@ public class NewMeetingActivity extends AppCompatActivity {
     private int count = 0;
     private boolean flag = true;
     private ProgressDialog mProgressDialog;
+    private JSONArray dateArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -325,7 +326,8 @@ public class NewMeetingActivity extends AppCompatActivity {
             Log.i(TAG, "jsonArray:" + jsonArray);
             LinearLayout linearLayout = new LinearLayout(getApplicationContext());
             TextView tv = new TextView(getApplicationContext());
-            linearLayout.setId(count++);
+            linearLayout.setId(count);
+            count++;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(0, 20, 0, 0);
             tv.setLayoutParams(layoutParams);
@@ -340,7 +342,7 @@ public class NewMeetingActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (flag) {
                         try {
-                            jsonArray.put(view.getId(), null);
+                            jsonArray.put(view.getId(), "");
                             addLayout.removeView(view);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -477,16 +479,16 @@ public class NewMeetingActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < dateArray.length(); i++) {
                     try {
-                        JSONObject jo = jsonArray.getJSONObject(i);
+                        JSONObject jo = dateArray.getJSONObject(i);
                         jo.put("endTime", Integer.parseInt(jo.getString("startTime")) + duration);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 map.put("meetId", meetId);
-                map.put("times", jsonArray.toString());
+                map.put("times", dateArray.toString());
                 return map;
             }
         };
@@ -524,8 +526,8 @@ public class NewMeetingActivity extends AppCompatActivity {
             return false;
         }
         textInputLayoutLocation.setErrorEnabled(false);
-        jsonArray = remove(jsonArray);
-        if (jsonArray.length() == 0) {
+        dateArray = remove(jsonArray);
+        if (dateArray.length() == 0) {
             Toast.makeText(getApplicationContext(), "您还没有选择时间哦", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -614,7 +616,8 @@ public class NewMeetingActivity extends AppCompatActivity {
         JSONArray result = new JSONArray();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
-                result.put(jsonArray.getJSONObject(i));
+                if(!jsonArray.get(i).equals(""))
+                    result.put(jsonArray.getJSONObject(i));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -632,7 +635,7 @@ public class NewMeetingActivity extends AppCompatActivity {
     public boolean existTime(JSONArray jsonArray, JSONObject jsonObject) {
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
-                if (jsonArray.getJSONObject(i).toString().equals(jsonObject.toString())) {
+                if (!jsonArray.get(i).equals("")&&jsonArray.getJSONObject(i).toString().equals(jsonObject.toString())) {
                     return true;
                 }
             } catch (JSONException e) {
