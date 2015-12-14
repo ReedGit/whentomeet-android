@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 if (nickname == null || nickname.isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"用户名不能为空",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"昵称不能为空",Toast.LENGTH_SHORT).show();
                     return;
                 }
 

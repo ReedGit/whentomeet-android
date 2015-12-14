@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 
 import com.giot.meeting.R;
 
-/**
- * Created by 伟 on 2015/10/6.
- */
 public class AboutFragment extends Fragment {
 
     @Nullable

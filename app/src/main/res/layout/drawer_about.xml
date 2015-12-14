@@ -11,11 +11,11 @@
 
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
             android:layout_marginTop="70dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/logo" />
+            android:background="@mipmap/logo" />
 
         <TextView
             android:layout_width="wrap_content"
